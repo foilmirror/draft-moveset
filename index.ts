@@ -9,6 +9,8 @@ import { parse } from "csv-parse";
 
 import * as path from "node:path";
 
+import format from './formatConfig.json' assert { type: "json" };
+
 const dataDir = "./data";
 
 const gens = new Generations(Dex);
