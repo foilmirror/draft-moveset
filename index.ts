@@ -117,7 +117,7 @@ async function writeLearnsetCsv() {
       path: path.join(dataDir, "gen" + format.gen.toString() + natdexLabel + "learnset") + ".csv"
     });*/
 
-    const n = 700; 
+    const n = 1000; 
     const monmoves: String[][] = new Array(n)
                                    .fill("")
                                    .map(() => 
@@ -173,7 +173,7 @@ async function writeLearnsetCsv() {
 }
 
 function writeTenMillionUsers(monmoves: String[][], writer: WriteStream, encoding: BufferEncoding, callback: () => void) {
-  let i = 500;
+  let i = 1000;
   let id = 0;
   function write() {
     let ok = true;
