@@ -24,7 +24,6 @@
     "@pkmn/data": "latest",
     "@pkmn/dex": "latest",
     "@pkmn/types": "latest",
-    "csv-parse": "^5.5.3",
     "fs": "^0.0.1-security",
     "json-2-csv": "^5.0.1"
   }
