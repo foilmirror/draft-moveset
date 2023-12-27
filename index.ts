@@ -1,6 +1,6 @@
 import { toID } from "@pkmn/data";
 import { GenerationNum } from "@pkmn/types";
-import { Generations, Species } from "@pkmn/data";
+import { Generations, Data, Species } from "@pkmn/data";
 import { Dex } from "@pkmn/dex";
 import { Nonstandard } from "@pkmn/types";
 import { createReadStream, writeFile, readFileSync } from "fs";
@@ -13,7 +13,26 @@ import format from './formatConfig.json' assert { type: "json" };
 
 const dataDir = "./data";
 
-const gens = new Generations(Dex);
+const NATDEX_UNOBTAINABLE_SPECIES = [
+  'Eevee-Starter', 'Floette-Eternal', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay',
+  'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter',
+  'Eternatus-Eternamax',
+];
+const NATDEX_EXISTS = (d: Data) => {
+  if (!d.exists) return false;
+  if (d.kind === 'Ability' && d.id === 'noability') return false;
+  // CAP
+  if ('isNonstandard' in d && d.isNonstandard && d.isNonstandard !== 'Past') return false;
+  if (d.kind === 'Species' && NATDEX_UNOBTAINABLE_SPECIES.includes(d.name)) return false;
+  return !(d.kind === 'Item' && ['Past', 'Unobtainable'].includes(d.isNonstandard!) &&
+    !d.zMove && !d.itemUser && !d.forcedForme);
+};
+
+var gens = new Generations(Dex);
+if (format.natdex == true) {
+    gens = new Generations(Dex, NATDEX_EXISTS);
+}
+
 
 type PokemonLearnsMoveRow = {
   pokemonPsId: string;
@@ -43,7 +62,7 @@ async function writeLearnsetCsv() {
         for (const [movePsId, learnMethods] of Object.entries(learnData)) {
           if (move.toLowerCase().replace(/\s/g, "") == movePsId) {
             for (let learnMethod of learnMethods) {
-              if (learnMethod.indexOf(genString) !== 0) {
+              if (format.natdex == false && learnMethod.indexOf(genString) !== 0) {
                 continue;
               }
               // Not a real source
@@ -86,8 +105,12 @@ async function writeLearnsetCsv() {
     });
   }
 
+  var natdexLabel = ""
+  if (format.natdex == true) {
+    natdexLabel = "ND";
+  }
   writeFile(
-    path.join(dataDir, "gen" + format.gen.toString() + "learnset") + ".csv",
+    path.join(dataDir, "gen" + format.gen.toString() + natdexLabel + "learnset") + ".csv",
     json2csv(learnsetRows, { emptyFieldValue: "" }),
     console.error
   );
