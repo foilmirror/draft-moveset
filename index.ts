@@ -29,7 +29,7 @@ async function writeLearnsetCsv() {
 
   const learnMethodByPokemonPsId_MovePsId = new Map<string, Set<string>>();
 
-  const gen = gens.get(9);
+  const gen = gens.get(format.gen);
   const learnsets = gen.learnsets;
   const genString = gen.num.toString();
   for (const move of moves) {
@@ -87,7 +87,7 @@ async function writeLearnsetCsv() {
   }
 
   writeFile(
-    path.join(dataDir, "learnset") + ".csv",
+    path.join(dataDir, "gen" + format.gen.toString() + "learnset") + ".csv",
     json2csv(learnsetRows, { emptyFieldValue: "" }),
     console.error
   );
