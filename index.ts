@@ -54,7 +54,7 @@ async function writeLearnsetCsv() {
         }
   
         for (const [movePsId, learnMethods] of Object.entries(learnData)) {
-          if (move.toLowerCase().replace(/\s/g, "") == movePsId) {
+          if (move.toLowerCase().replaceAll(/\s/g, "").replaceAll("-", "")  == movePsId) {
             for (let learnMethod of learnMethods) {
               if (format.natdex == false && learnMethod.indexOf(genString) !== 0) {
                 continue;
