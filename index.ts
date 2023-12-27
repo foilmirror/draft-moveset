@@ -47,6 +47,42 @@ async function writeLearnsetCsv() {
   const genString = gen.num.toString();
   for (const move of moves) {
     for (const specie of gen.species) {
+      //if (move == "Drizzle"..) could check here to speed things up
+      const { abilities } = specie;
+      if (abilities[0]) {
+        if (abilities[0] == move) {
+          const pokemonPsName = specie.name;
+          const key = [genString, pokemonPsName, move].join("_");
+
+          learnMethodByPokemonPsId_MovePsId.set(
+            key,
+            new Set([""])
+          );
+        }
+      }
+      if (abilities[1]) {
+        if (abilities[1] == move) {
+          const pokemonPsName = specie.name;
+          const key = [genString, pokemonPsName, move].join("_");
+
+          learnMethodByPokemonPsId_MovePsId.set(
+            key,
+            new Set([""])
+          );
+        }
+      }
+      if (abilities.H) {
+        if (abilities.H == move) {
+          const pokemonPsName = specie.name;
+          const key = [genString, pokemonPsName, move].join("_");
+
+          learnMethodByPokemonPsId_MovePsId.set(
+            key,
+            new Set([""])
+          );
+        }
+      }
+
       for await (const learnset of learnsets.all(specie)) {
         const { learnset: learnData } = learnset;
         if (!learnData) {
